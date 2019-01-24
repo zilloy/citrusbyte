@@ -23,6 +23,27 @@ namespace Citrusbyte.Collections.Tests
 
             new object[] {
                 new ArbitraryArray()
+                        .Add(new ArbitraryArray()
+                                .Add(1)
+                                .Add(2)
+                                .Add(new ArbitraryArray()
+                                        .Add(3)
+                                        .Add(new ArbitraryArray()
+                                                .Add(4)
+                                                .Add(5)
+                                                .Add(new ArbitraryArray()
+                                                        .Add(6)
+                                                    )
+                                            )
+                                    )
+                            )
+                        .Add(7),
+
+                new [] {1,2,3,4,5,6,7}
+            },
+
+            new object[] {
+                new ArbitraryArray()
                         .Add(1)
                         .Add(2)
                         .Add(3)
@@ -41,7 +62,7 @@ namespace Citrusbyte.Collections.Tests
         [MemberData(nameof(Data))]
         public void Flattens_To_Array(ArbitraryArray arbitraryArray, int[] expected)
         {
-            Assert.Equal(arbitraryArray.Flatten(), expected);
+            Assert.Equal(expected, arbitraryArray.Flatten());
         }
 
         [Fact]

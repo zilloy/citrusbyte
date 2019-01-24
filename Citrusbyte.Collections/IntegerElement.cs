@@ -1,19 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Citrusbyte.Collections
+﻿namespace Citrusbyte.Collections
 {
-    internal class IntegerElement : IFlattenable
+    internal class IntegerElement : Element
     {
-        private readonly int _value;
+        public int Value { get; }
 
         public IntegerElement(int value)
         {
-            _value = value;
-        }
-
-        public IEnumerable<int> Flatten()
-        {
-            yield return _value;
+            Value = value;
         }
     }
 }

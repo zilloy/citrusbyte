@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Citrusbyte.Collections
 {
-    public class ArbitraryArray : IFlattenable
+    public class ArbitraryArray : Element
     {
-        private List<IFlattenable> _elements = new List<IFlattenable>();
+        private List<Element> _elements = new List<Element>();
 
         public ArbitraryArray Add(int element)
         {
@@ -22,16 +22,33 @@ namespace Citrusbyte.Collections
             return this;
         }
 
-        //execution time for deepest possible structure of:
-        //1000 elements - 00:00:00.0194165
-        //5000 elements - 00:00:00.4333768
+        //execution time for deep structure of:
+        //1000 elements - 00:00:00.0020284
+        //5000 elements - 00:00:00.0023037
         public IEnumerable<int> Flatten()
         {
-            foreach (var element in _elements)
+            var stack = new Stack<Element>();
+
+            void AddToStack(IList<Element> elements)
             {
-                foreach (var subElement in element.Flatten())
+                for (var i = elements.Count - 1; i >= 0; --i)
                 {
-                    yield return subElement;
+                    stack.Push(elements[i]);
+                }
+            }
+
+            AddToStack(_elements);
+
+            while (stack.TryPop(out var element))
+            {
+                if (element is IntegerElement)
+                {
+                    yield return ((IntegerElement)element).Value;
+                }
+
+                if (element is ArbitraryArray)
+                {
+                    AddToStack(((ArbitraryArray)element)._elements);
                 }
             }
         }
